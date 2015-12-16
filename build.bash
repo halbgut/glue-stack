@@ -9,23 +9,23 @@ start_express () {
   node server.js ${PORT} 2>&1
 }
 
-browserify () {
+comp_browserify () {
     local FILE=${1}
     local DEBUG=''
     if [[ ${NODE_ENVIRONMENT} != 'PRODUCTION' ]]; then
       DEBUG="--debug"
     fi
     maybe_make_dir build/_js
-    node_modules/browserify/bin/cmd.js ${FILE} -t ${DEBUG} babelify build/_js/$(basename ${file})
+    browserify ${FILE} -t ${DEBUG} babelify build/_js/$(basename ${file})
 }
 
 js () {
   FILE=${1}
   if [ -f ${FILE} ]; then
-    browserify ${FILE}
+    comp_browserify ${FILE}
   else
     for file in src/client/js/*; do
-      browserify ${file}
+      comp_browserify ${file}
     done
   fi
 }
@@ -35,10 +35,23 @@ riot () {
   cp -a src/client/tag/* build/_tag/
 }
 
-css () {
+comp_postcss () {
+  FILE=${1}
   maybe_make_dir build/_css
-  cp -a src/client/css/* build/_css/
+  postcss --local-plugins --config postcss.json --dir build/_css ${FILE}
 }
+
+css () {
+  FILE=${1}
+  if [ -f ./${FILE} ]; then
+    comp_postcss ${FILE}
+  else
+    for file in src/client/css/*; do
+      comp_postcss ${file}
+    done
+  fi
+}
+
 
 build () {
   js
