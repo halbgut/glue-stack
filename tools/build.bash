@@ -62,6 +62,31 @@ css () {
   fi
 }
 
+comp_handlebars () {
+  FILE=${1}
+  maybe_make_dir ${PROJECT_ROOT}build/_html
+  if [ -f "${FILE}" ]; then
+    OUT=$(cd ${PROJECT_ROOT}src/server/handlebars && node ../../../${FILE})
+    if (( ${#OUT} > 1 )); then
+      DIR=$(dirname ${FILE})
+      DIR=build/_html/${DIR:23}
+      maybe_make_dir ${PROJECT_ROOT}${DIR}
+      echo ${OUT} > ${PROJECT_ROOT}build/_html/$(basename ${FILE:0:$(( ${#FILE} - 3 ))}).html
+    fi
+  fi
+}
+
+handlebars () {
+  FILE=${1}
+  if [ -f "./${FILE}" ]; then
+    comp_handlebars ${FILE}
+  else
+    for file in $( find ${PROJECT_ROOT}src/server/handlebars/* -type f -name *.js ); do
+      comp_handlebars ${file}
+    done
+  fi
+}
+
 
 build () {
   js
@@ -77,13 +102,19 @@ maybe_make_dir () {
 }
 
 if [[ ${ACTION} == 'js' ]]; then
+  echo "Compiling JS"
   js ${2}
 elif [[ ${ACTION} == 'css' ]]; then
+  echo "Compiling CSS"
   css ${2}
 elif [[ ${ACTION} == 'riot' ]]; then
+  echo "Compiling copying Riot-tags"
   riot ${2}
 elif [[ ${ACTION} == 'start' ]]; then
   start_express ${2}
+elif [[ ${ACTION} == 'handlebars' ]]; then
+  echo "Compiling handlebar templates"
+  handlebars ${2}
 else
   build
 fi
