@@ -19,6 +19,11 @@
     "postcss-media-minmax": "2.1.1",
     "postcss-selector-matches": "2.0.1",
     "postcss-selector-not": "2.0.0"
+  },
+  "scripts": {
+    "start": "./tools/build.bash start",
+    "postinstall": "./tools/build.bash build",
+    "watch": "./tools/watch.js"
   }
 }
 

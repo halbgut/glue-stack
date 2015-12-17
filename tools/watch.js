@@ -3,7 +3,7 @@
 var gaze = require('gaze')
 var spawn_child = require('child_process').spawn
 
-var express = spawn('./build.bash', ['start'])
+var express = spawn('./tools/build.bash', ['start'])
 
 function spawn () {
   var child = spawn_child.apply(null, arguments)
@@ -15,29 +15,29 @@ function spawn () {
 gaze('src/client/js/**/*.js', (err, watcher) => {
   if(err) console.error(err)
   watcher.on('all', () => {
-    spawn('./build.bash', ['js'])
+    spawn('./tools/build.bash', ['js'])
   })
 })
 
-gaze(['src/server/**/*.js', 'server.js'], (err, watcher) => {
+gaze('src/server/**/*.js', (err, watcher) => {
   if(err) console.error(err)
   watcher.on('all', () => {
     express.kill()
-    express.on('close', () => spawn('./build.bash', ['start']))
+    express.on('close', () => spawn('./tools/build.bash', ['start']))
   })
 })
 
 gaze('src/client/css/**/*.css', (err, watcher) => {
   if(err) console.error(err)
   watcher.on('all', () => {
-    spawn('./build.bash', ['css'])
+    spawn('./tools/build.bash', ['css'])
   })
 })
 
 gaze('src/client/tag/**/*.tag', (err, watcher) => {
   if(err) console.error(err)
   watcher.on('all', () => {
-    spawn('./build.bash', ['riot'])
+    spawn('./tools/build.bash', ['riot'])
   })
 })
 
