@@ -1,1 +1,0 @@
-../../node_modules/riot/riot+compiler.min.js
