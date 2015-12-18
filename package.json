@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "./tools/build.bash start",
-    "postinstall": "./tools/build.bash build",
+    "postinstall": "./tools/build.bash",
     "watch": "./tools/watch.js"
   }
 }

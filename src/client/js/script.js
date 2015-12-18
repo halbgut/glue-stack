@@ -1,0 +1,2 @@
+riot.mount('example-riot')
+
