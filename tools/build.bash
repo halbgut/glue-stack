@@ -86,7 +86,6 @@ comp_handlebars () {
     OUT=$(cd ${PROJECT_ROOT}src/client/handlebars && node ../../../${FILE})
     if (( ${#OUT} > 1 )); then
       NEW_DIR=$(make_dir ${PROJECT_ROOT}build/_html/ ${FILE} ${PROJECT_ROOT}src/client/handlebars/)
-      echo ${NEW_DIR}
       echo ${OUT} > ${NEW_DIR}$(change_ext $(basename ${FILE}) html 2)
     fi
   fi

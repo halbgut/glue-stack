@@ -31,6 +31,7 @@ gaze('src/server/**/*.js', (err, watcher) => {
 
 process.on('SIGINT', () => {
   process.kill(-express.pid)
+  process.exit()
 })
 
 process.on('beforeExit', () => {
